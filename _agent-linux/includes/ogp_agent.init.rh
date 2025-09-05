@@ -1,16 +1,16 @@
 #!/bin/sh
 
 #
-#   Startup/shutdown script for the Game Server Agent.
+#   Startup/shutdown script for the OGP Agent.
 #
 #   Linux chkconfig stuff:
 #
 #   chkconfig: 2345 88 10
-#   description: Startup/shutdown script for the Game Server Agent
+#   description: Startup/shutdown script for the OGP Agent
 
 agent_dir=OGP_AGENT_DIR
 agent_user=OGP_USER
-service=agent
+service=ogp_agent
 
 # Source function library.
 if [ -f /etc/rc.d/init.d/functions ] ; then
@@ -23,7 +23,7 @@ if [ "$( whoami )" != "root" ]
 then
 	if [ -f "/usr/bin/sudo" ] && [ "$( groups $agent_user | grep "\bsudo\b" )" != "" ]
 	then
-		sudo /etc/init.d/agent ${1:-''}
+		sudo /etc/init.d/ogp_agent ${1:-''}
 		exit
 	else
 		echo "Permission denied."
@@ -32,9 +32,9 @@ then
 fi
 
 start() {
-	echo -n "Starting Game Server Agent: "
-	if [ -e "$agent_dir/agent_run.pid" ]; then
-		PID=`cat $agent_dir/agent_run.pid`
+	echo -n "Starting OGP Agent: "
+	if [ -e "$agent_dir/ogp_agent_run.pid" ]; then
+		PID=`cat $agent_dir/ogp_agent_run.pid`
 		RET=$(kill -s 0 $PID &> /dev/null; echo $?)
 		if [ $RET -eq 0 ]; then
 			echo -n "already running."
@@ -100,22 +100,22 @@ start() {
 	fi
 	
 	cd $agent_dir
-	su -c "screen -d -m -t agent -c screenrc -S agent ./agent_run -pidfile agent_run.pid" $agent_user &> $agent_dir/agent.svc &
+	su -c "screen -d -m -t ogp_agent -c ogp_screenrc -S ogp_agent ./ogp_agent_run -pidfile ogp_agent_run.pid" $agent_user &> $agent_dir/ogp_agent.svc &
 	echo -n "started successfully."
 	bold=`tput bold`
 	normal=`tput sgr0`
 	echo
-	echo "Use ${bold}sudo su -c 'screen -S agent -r' $agent_user${normal} to attach the agent screen,"
+	echo "Use ${bold}sudo su -c 'screen -S ogp_agent -r' $agent_user${normal} to attach the agent screen,"
 	echo "and ${bold}ctrl+A+D${normal} to detach it."
 	return 0
 }
 
 stop() {
 	# Stop daemon
-	echo -n "Stopping Game Server Agent: "
-	if [ -f $agent_dir/agent_run.pid ]
+	echo -n "Stopping OGP Agent: "
+	if [ -f $agent_dir/ogp_agent_run.pid ]
 	then
-		PID=`cat $agent_dir/agent_run.pid`
+		PID=`cat $agent_dir/ogp_agent_run.pid`
 		RET=$(kill $PID &> /dev/null; echo $?)
 		if [ $RET -ne 0 ]; then
 			echo -n "not running."
@@ -123,7 +123,7 @@ stop() {
 			echo -n "stopped successfully."
 		fi
 	else
-		echo -n "PID file not found ($agent_dir/agent_run.pid)"
+		echo -n "PID file not found ($agent_dir/ogp_agent_run.pid)"
 	fi
 	echo
 	return 0
@@ -145,7 +145,7 @@ case "$1" in
 	RETVAL=$?
 	;;
  	*)
-	echo "Usage: service agent start|stop|restart"
+	echo "Usage: service ogp_agent start|stop|restart"
 	RETVAL=1
 	echo
 	;;

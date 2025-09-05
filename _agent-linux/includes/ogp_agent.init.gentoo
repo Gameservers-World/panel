@@ -12,14 +12,14 @@ depend() {
 }
 
 start() {
-	ebegin "Starting Game Server Agent"
-        start-stop-daemon --verbose --chdir $agent_dir --start --background --user $agent_user -e PWD="$agent_dir" --exec screen -d -m -t agent -c screenrc -S agent ./agent_run -pidfile agent_run.pid
-        eend $? "Failed to start Game Server Agent"
+	ebegin "Starting OGP Agent"
+        start-stop-daemon --verbose --chdir $agent_dir --start --background --user $agent_user -e PWD="$agent_dir" --exec screen -d -m -t ogp_agent -c ogp_screenrc -S ogp_agent ./ogp_agent_run -pidfile ogp_agent_run.pid
+        eend $? "Failed to start OGP Agent"
 }
 
 stop() {
-	ebegin "Stopping Game Server Agent"
-	start-stop-daemon --stop --quiet --pidfile $agent_dir/agent_run.pid
-	eend $? "Failed to stop Game Server Agent"
+	ebegin "Stopping OGP Agent"
+	start-stop-daemon --stop --quiet --pidfile $agent_dir/ogp_agent_run.pid
+	eend $? "Failed to stop OGP Agent"
 }
 

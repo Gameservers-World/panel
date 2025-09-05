@@ -6,7 +6,7 @@
 define('OGP_LANG_add_mods_note', "Sie müssen Mods hinzufügen, nachdem Sie dem Benutzer einen Server hinzugefügt haben. Dies kann durch Bearbeiten des Servers erfolgen.");
 define('OGP_LANG_game_servers', "Spielserver ");
 define('OGP_LANG_game_path', "Game Pfad");
-define('OGP_LANG_game_path_info', "Der absolute Server Pfad. Beispiel: /home/ogpbot/User_Files/My_Server");
+define('OGP_LANG_game_path_info', "Der absolute Server Pfad. Beispiel: /home/ogpbot/OGP_User_Files/My_Server");
 define('OGP_LANG_game_server_name_info', "Servername hilft Benutzern, ihre Server zu identifizieren. ");
 define('OGP_LANG_control_password', "Control Passwort");
 define('OGP_LANG_control_password_info', "Dieses Passwort wird für die Serversteuerung verwendet, z. B. für das RCON-Passwort. Wenn das Passwort leer ist, werden andere Mittel verwendet.");

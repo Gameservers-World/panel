@@ -6,7 +6,7 @@
 define('OGP_LANG_add_mods_note', "Usted necesita agregar mods después de agregar el servidor al usuario.<br>Esto se puede hacer mediante la edición del servidor.");
 define('OGP_LANG_game_servers', "Servidores de Juegos");
 define('OGP_LANG_game_path', "Carpeta del juego");
-define('OGP_LANG_game_path_info', "Una ruta absoluta del servidor. Ejemplo: /home/ogpbot/User_Files/My_Server");
+define('OGP_LANG_game_path_info', "Una ruta absoluta del servidor. Ejemplo: /home/ogpbot/OGP_User_Files/My_Server");
 define('OGP_LANG_game_server_name_info', "Ayuda a identificar el servidor.");
 define('OGP_LANG_control_password', "RCON");
 define('OGP_LANG_control_password_info', "Esta contraseña se usa para el control del servidor, en algunos casos se utiliza para RCON, o como contraseña de serveradmin en TS3. Si la contraseña esta vacía algunas funciones podrían no estar disponibles.");
