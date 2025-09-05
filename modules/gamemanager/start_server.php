@@ -155,18 +155,22 @@ function exec_ogp_module()
 	
 	$home_log = getLastLines($home_log, 40);
 	
+	// Replace hardcoded log output with AJAX container
 	if ($log_retval > 0)
 	{
-		if ( $log_retval == 2 )
-			print_failure(get_lang('server_not_running_log_found'));	
-		//echo "<pre style='background:black;color:white;'>".$home_log."</pre>";
-		if ($log_retval == 2)
-			return;
+		echo "<div id='server-log-output'><pre style='background:black;color:white;'>".htmlspecialchars($home_log)."</pre></div>";
+	} else {
+		echo "<div id='server-log-output'><pre style='background:black;color:white;'>Unable to get log: $log_retval</pre></div>";
 	}
-	else
-	{
-		print_failure(get_lang_f('unable_to_get_log',$log_retval));
-	}
+	// Add AJAX refresh script
+	?>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+	setInterval(function() {
+	  $('#server-log-output').load('modules/gamemanager/get_server_log.php?home_id=<?php echo $home_id; ?>&mod_id=<?php echo $mod_id; ?>');
+	}, 2000);
+	</script>
+	<?php
 	
 	// If game is not supported by lgsl we skip the lgsl checks and
 	// assume successfull start.
