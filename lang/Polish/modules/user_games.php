@@ -6,7 +6,7 @@
 define('OGP_LANG_add_mods_note', "Trzeba dodać mody po dodaniu serwera do użytkownika. Można to zrobić poprzez edycję serwera..");
 define('OGP_LANG_game_servers', "Game Servers");
 define('OGP_LANG_game_path', "Game Path");
-define('OGP_LANG_game_path_info', "An absolute server path. Example: /home/ogpbot/User_Files/My_Server");
+define('OGP_LANG_game_path_info', "An absolute server path. Example: /home/ogpbot/OGP_User_Files/My_Server");
 define('OGP_LANG_game_server_name_info', "Nazwa serwera ułatwia użytkownikom do jednoznacznej identyfikacji swoich serwerów.");
 define('OGP_LANG_control_password', "Hasło Control");
 define('OGP_LANG_control_password_info', "To hasło jest używane do kontroli serwera, takich jak hasła RCON. Jeśli hasło jest puste to w inny sposób są wykorzystywane.");

@@ -6,7 +6,7 @@
 define('OGP_LANG_add_mods_note', "Hozzáadás után mod-ot is hozzá kell adni a szerverhez. Ez a szerver szerkesztésével lehetséges.");
 define('OGP_LANG_game_servers', "Játék szerverek");
 define('OGP_LANG_game_path', "Szerver elérési útja");
-define('OGP_LANG_game_path_info', "A szerver abszolút elérési útja. Példa: /home/ogpbot/User_Files/My_Server");
+define('OGP_LANG_game_path_info', "A szerver abszolút elérési útja. Példa: /home/ogpbot/OGP_User_Files/My_Server");
 define('OGP_LANG_game_server_name_info', "Szerver neve segít a felhasználóknak beazonosítani a szervereiket.");
 define('OGP_LANG_control_password', "Vezérlőjelszó");
 define('OGP_LANG_control_password_info', "Ez a jelszó a szerver vezérléséhez használandó, mint például az RCON jelszó. Ha a jelszó üres, akkor más eszközöket használnak.");
