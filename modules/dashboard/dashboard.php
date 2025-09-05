@@ -202,6 +202,21 @@ function exec_ogp_module()
 		foreach($colhtml as $html )
 			echo $html.'</div>';
 	}
+	
+	// Server Status Link - Available to all users
+	echo "<div style='margin-top:20px;'>
+		   <div class='bloc rounded' >
+		   <h4>Server Status</h4>
+			<div style='text-align: center; padding: 20px;'>
+				<p>View the status of all game servers</p>
+				<a href='server_status.php' target='_blank' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block; margin: 10px;'>
+					🖥️ View Server Status
+				</a>
+				<br><small style='color: #666;'>Opens in a new window</small>
+			</div>
+		   </div>
+		  </div>";
+	
 	if( $isAdmin AND $db->isModuleInstalled('status') )
 	{
 		echo "<h0>".get_lang('server_status')."</h0><br>";
