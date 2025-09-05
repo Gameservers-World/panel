@@ -1,9 +1,7 @@
 #!/usr/bin/perl
 #
-# OGP - Open Game Panel
-# Copyright (C) 2008 - 2018 The OGP Development Team
-#
-# http://www.opengamepanel.org/
+# Game Server Panel
+# Copyright (C) 2008 - 2018 The Development Team
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -66,7 +64,7 @@ use constant SCREEN_LOG_LOCAL  => $Cfg::Preferences{screen_log_local};
 use constant DELETE_LOGS_AFTER  => $Cfg::Preferences{delete_logs_after};
 use constant LINUX_USER_PER_GAME_SERVER  => $Cfg::Preferences{linux_user_per_game_server};
 use constant AGENT_PID_FILE =>
-  Path::Class::File->new(AGENT_RUN_DIR, 'ogp_agent.pid');
+  Path::Class::File->new(AGENT_RUN_DIR, 'agent.pid');
 use constant AGENT_RSYNC_GENERIC_LOG =>
   Path::Class::File->new(AGENT_RUN_DIR, 'rsync_update_generic.log');
 use constant STEAM_LICENSE_OK => "Accept";
@@ -81,14 +79,14 @@ use constant SCREEN_LOGS_DIR =>
 use constant GAME_STARTUP_DIR =>
   Path::Class::Dir->new(AGENT_RUN_DIR, 'startups');
 use constant SCREENRC_FILE =>
-  Path::Class::File->new(AGENT_RUN_DIR, 'ogp_screenrc');
+  Path::Class::File->new(AGENT_RUN_DIR, 'screenrc');
 use constant SCREENRC_FILE_BK =>
-  Path::Class::File->new(AGENT_RUN_DIR, 'ogp_screenrc_bk');
+  Path::Class::File->new(AGENT_RUN_DIR, 'screenrc_bk');
 use constant SCREENRC_TMP_FILE =>
-  Path::Class::File->new(AGENT_RUN_DIR, 'ogp_screenrc.tmp');
+  Path::Class::File->new(AGENT_RUN_DIR, 'screenrc.tmp');
 use constant SCREEN_TYPE_HOME   => "HOME";
 use constant SCREEN_TYPE_UPDATE => "UPDATE";
-use constant SERVER_RUNNER_USER => "ogp_server_runner";
+use constant SERVER_RUNNER_USER => "server_runner";
 use constant FD_DIR => Path::Class::Dir->new(AGENT_RUN_DIR, 'FastDownload');
 use constant FD_ALIASES_DIR => Path::Class::Dir->new(FD_DIR, 'aliases');
 use constant FD_PID_FILE => Path::Class::File->new(FD_DIR, 'fd.pid');
@@ -550,7 +548,7 @@ sub create_screen_cmd
 sub create_screen_cmd_loop
 {
 	my ($screen_id, $exec_cmd, $envVars, $skipLoop) = @_;
-	my $server_start_bashfile = $screen_id . "_startup_scr.sh";
+	my $server_start_bashfile = "start_server.sh";
 	
 	$exec_cmd = replace_OGP_Env_Vars($screen_id, "", "", $exec_cmd);
 	
@@ -1020,7 +1018,7 @@ sub universal_start_without_decrypt
 	  "Startup command [ $cli_bin ] will be executed in dir $game_binary_dir.";
 	
 	# Fix permissions one last time (for backup_home_log created folder / files / etc)
-	my $server_start_bashfile = $screen_id . "_startup_scr.sh";
+	my $server_start_bashfile = "start_server.sh";
 	secure_path_without_decrypt('chattr-i', $server_start_bashfile);
 	set_path_ownership($owner, $group, $home_path, 1);
 	my $readOnlyOwnerCmd = "chmod -Rf og-r '$server_start_bashfile'";
