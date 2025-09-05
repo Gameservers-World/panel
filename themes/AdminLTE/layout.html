@@ -92,9 +92,41 @@
 		<!-- Sidebar Menu -->
 		<nav class="mt-2 pb-5">
 			<ul class="nav nav-pills nav-child-indent nav-sidebar flex-column text-sm" data-widget="treeview" role="menu" data-accordion="false">
+				<!-- Navigation items are rendered here when logged in -->
+			</ul>
+		</nav>
+		<!-- /.sidebar-menu -->
+	</div>
+	<!-- /.sidebar -->
+</aside>
+<!-- /Main Sidebar Container -->
 
-				%body%
-				
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Preloader -->
+	<div class="preloader">
+		<h1>
+			<i class="fas fa-spinner fa-spin text-dark" style="--fa-animation-duration:3s;"></i>
+		</h1>
+	</div>
+	
+	<!-- Main Section -->
+	<section class="content pt-3">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body main">
+							%body%
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Main Section -->
+</div>
+<!-- /.content-wrapper -->
 
 	<!-- Control Sidebar -->
 	<aside class="control-sidebar control-sidebar-dark">
