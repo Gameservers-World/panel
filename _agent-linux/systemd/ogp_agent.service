@@ -1,16 +1,15 @@
-# ogp_agent systemd Service Script
-# By Open Game Panel
-# OGP <own3mall@gmail.com>
+# Game Server Agent systemd Service Script
+# By Game Server Panel
 [Unit]
-Description=Open Game Panel (OGP) Daemon www.opengamepanel.org
+Description=Game Server Agent Daemon
 After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/sh -c "{OGP_AGENT_PATH}/ogp_agent_init start"
-ExecStop=/bin/sh -c "{OGP_AGENT_PATH}/ogp_agent_init stop"
+ExecStart=/bin/sh -c "{OGP_AGENT_PATH}/agent_init start"
+ExecStop=/bin/sh -c "{OGP_AGENT_PATH}/agent_init stop"
 RemainAfterExit=yes
-PIDFile="{OGP_AGENT_PATH}/ogp_agent_run.pid"
+PIDFile="{OGP_AGENT_PATH}/agent_run.pid"
 
 [Install]
 WantedBy=multi-user.target

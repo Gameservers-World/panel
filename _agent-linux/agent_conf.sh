@@ -195,7 +195,7 @@ then
 	echo "Writing Config file - $cfgfile"
 
 	echo "%Cfg::Config = (
-	logfile => '${agent_home}/ogp_agent.log',
+	logfile => '${agent_home}/agent.log',
 	listen_port  => '${port}',
 	listen_ip => '${ip}',
 	version => '${AGENT_VERSION}',
@@ -521,7 +521,7 @@ then
 								ftpd_user=$(grep -oP '^User\s+\K.+' ${proFTPdConfFile})
 								ftpd_group=$(grep -oP '^Group\s+\K.+' ${proFTPdConfFile})
 								if [ -z "$agent_user" ]; then
-									agent_user=$(grep -oP 'agent_user=\K.+' /etc/init.d/ogp_agent)
+									agent_user=$(grep -oP 'agent_user=\K.+' /etc/init.d/agent)
 								fi
 								if [ ! -z "$ftpd_user" ] && [ ! -z "$ftpd_group" ] && [ ! -z "$agent_user" ]
 								then
