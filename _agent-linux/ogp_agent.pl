@@ -1,7 +1,9 @@
 #!/usr/bin/perl
 #
-# Game Server Panel
-# Copyright (C) 2008 - 2018 The Development Team
+# OGP - Open Game Panel
+# Copyright (C) 2008 - 2018 The OGP Development Team
+#
+# http://www.opengamepanel.org/
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -64,7 +66,7 @@ use constant SCREEN_LOG_LOCAL  => $Cfg::Preferences{screen_log_local};
 use constant DELETE_LOGS_AFTER  => $Cfg::Preferences{delete_logs_after};
 use constant LINUX_USER_PER_GAME_SERVER  => $Cfg::Preferences{linux_user_per_game_server};
 use constant AGENT_PID_FILE =>
-  Path::Class::File->new(AGENT_RUN_DIR, 'agent.pid');
+  Path::Class::File->new(AGENT_RUN_DIR, 'ogp_agent.pid');
 use constant AGENT_RSYNC_GENERIC_LOG =>
   Path::Class::File->new(AGENT_RUN_DIR, 'rsync_update_generic.log');
 use constant STEAM_LICENSE_OK => "Accept";
@@ -79,14 +81,14 @@ use constant SCREEN_LOGS_DIR =>
 use constant GAME_STARTUP_DIR =>
   Path::Class::Dir->new(AGENT_RUN_DIR, 'startups');
 use constant SCREENRC_FILE =>
-  Path::Class::File->new(AGENT_RUN_DIR, 'screenrc');
+  Path::Class::File->new(AGENT_RUN_DIR, 'ogp_screenrc');
 use constant SCREENRC_FILE_BK =>
-  Path::Class::File->new(AGENT_RUN_DIR, 'screenrc_bk');
+  Path::Class::File->new(AGENT_RUN_DIR, 'ogp_screenrc_bk');
 use constant SCREENRC_TMP_FILE =>
-  Path::Class::File->new(AGENT_RUN_DIR, 'screenrc.tmp');
+  Path::Class::File->new(AGENT_RUN_DIR, 'ogp_screenrc.tmp');
 use constant SCREEN_TYPE_HOME   => "HOME";
 use constant SCREEN_TYPE_UPDATE => "UPDATE";
-use constant SERVER_RUNNER_USER => "server_runner";
+use constant SERVER_RUNNER_USER => "ogp_server_runner";
 use constant FD_DIR => Path::Class::Dir->new(AGENT_RUN_DIR, 'FastDownload');
 use constant FD_ALIASES_DIR => Path::Class::Dir->new(FD_DIR, 'aliases');
 use constant FD_PID_FILE => Path::Class::File->new(FD_DIR, 'fd.pid');
@@ -293,7 +295,7 @@ open(PID, '>', AGENT_PID_FILE)
 print PID "$$\n";
 close(PID);
 
-logger "Game Server Agent started - "
+logger "Open Game Panel - Agent started - "
   . AGENT_VERSION
   . " - port "
   . AGENT_PORT
@@ -385,7 +387,7 @@ my $d = Frontier::Daemon::OGP::Forking->new(
 			 LocalPort => AGENT_PORT,
 			 LocalAddr => AGENT_IP,
 			 ReuseAddr => '1'
-) or die "Couldn't start Game Server Agent: $!";
+) or die "Couldn't start OGP Agent: $!";
 
 sub backup_home_log
 {
@@ -532,13 +534,13 @@ sub get_home_pids
 sub create_screen_id
 {
 	my ($screen_type, $home_id) = @_;
-	return sprintf("GS_%s_%09d", $screen_type, $home_id);
+	return sprintf("OGP_%s_%09d", $screen_type, $home_id);
 }
 
 sub create_screen_cmd
 {
 	my ($screen_id, $exec_cmd) = @_;
-	$exec_cmd = replace_Env_Vars($screen_id, "", "", $exec_cmd);
+	$exec_cmd = replace_OGP_Env_Vars($screen_id, "", "", $exec_cmd);
 	return
 	  sprintf('export WINEDEBUG="fixme-all" && export DISPLAY=:1 && screen -d -m -t "%1$s" -c ' . SCREENRC_FILE . ' -S %1$s %2$s',
 			  $screen_id, $exec_cmd);
@@ -548,9 +550,9 @@ sub create_screen_cmd
 sub create_screen_cmd_loop
 {
 	my ($screen_id, $exec_cmd, $envVars, $skipLoop) = @_;
-	my $server_start_bashfile = "start_server.sh";
+	my $server_start_bashfile = $screen_id . "_startup_scr.sh";
 	
-	$exec_cmd = replace_Env_Vars($screen_id, "", "", $exec_cmd);
+	$exec_cmd = replace_OGP_Env_Vars($screen_id, "", "", $exec_cmd);
 	
 	# Allow file to be overwritten
 	if(-e $server_start_bashfile){
@@ -613,8 +615,8 @@ sub create_screen_cmd_loop
 sub handle_lock_command_line{
 	my ($command) = @_;
 	if(defined $command && $command ne ""){
-		if ($command =~ m/{LOCK_FILE}/) {
-			$command =~ s/{LOCK_FILE}\s*//g;
+		if ($command =~ m/{OGP_LOCK_FILE}/) {
+			$command =~ s/{OGP_LOCK_FILE}\s*//g;
 			return secure_path_without_decrypt("chattr+i", $command);
 		}
 	}
@@ -622,7 +624,7 @@ sub handle_lock_command_line{
 	return 0;
 }
 
-sub replace_Env_Vars{
+sub replace_OGP_Env_Vars{
 	# This function replaces constants from environment variables set in the XML
 	my ($screen_id, $homeid, $homepath, $exec_cmd, $game_key) = @_;
 	
@@ -636,7 +638,7 @@ sub replace_Env_Vars{
 		# If the install file exists, the game can be auto updated, else it will be ignored by the game for improper syntax
 		# To generate the install file, the "Install/Update via Steam" button must be clicked on at least once!
 		if(-e $fullPath){
-			$exec_cmd =~ s/{STEAM_CMD_DIR}/$steamCMDPath/g;
+			$exec_cmd =~ s/{OGP_STEAM_CMD_DIR}/$steamCMDPath/g;
 			$exec_cmd =~ s/{STEAMCMD_INSTALL_FILE}/$steamInsFile/g;
 		}
 	}
@@ -644,7 +646,7 @@ sub replace_Env_Vars{
 	
 	# Handle home directory replacement
 	if(defined $homepath && $homepath ne ""){
-		$exec_cmd =~ s/{HOME_DIR}/$homepath/g;
+		$exec_cmd =~ s/{OGP_HOME_DIR}/$homepath/g;
 	}
 	
 	# Handle global game shared directory replacement
@@ -656,7 +658,7 @@ sub replace_Env_Vars{
 		{
 			logger "Could not create " . $shared_path . " directory $!.", 1;
 		}
-		$exec_cmd =~ s/{GAME_SHARED_DIR}/$shared_path/g;
+		$exec_cmd =~ s/{OGP_GAME_SHARED_DIR}/$shared_path/g;
 	}
 	
 	return $exec_cmd;
@@ -840,11 +842,11 @@ sub universal_start_without_decrypt
 	
 	my $owner = SERVER_RUNNER_USER;
 	my $group = SERVER_RUNNER_USER;
-	my $agentGroup = `whoami`;
+	my $ogpAgentGroup = `whoami`;
 	
 	my $screen_id = create_screen_id(SCREEN_TYPE_HOME, $home_id);
 
-	chomp $agentGroup;
+	chomp $ogpAgentGroup;
 	
 	if(defined LINUX_USER_PER_GAME_SERVER && LINUX_USER_PER_GAME_SERVER eq "1"){
 		$owner = "gamehome" . $home_id;
@@ -862,12 +864,12 @@ sub universal_start_without_decrypt
 		}
 	}
 	
-	# Fix perms on agent user's homedir so that other users can access their owned files within this dir
-	my $fixHomeDirCommand = 'chmod -R ug+rwx $( getent passwd "' . $agentGroup . '" | cut -d: -f6 )';
-	sudo_exec_without_decrypt($fixHomeDirCommand);
+	# Fix perms on ogp_agent user's homedir so that other users can access their owned files within this dir
+	my $fixOGPHomeDirCommand = 'chmod -R ug+rwx $( getent passwd "' . $ogpAgentGroup . '" | cut -d: -f6 )';
+	sudo_exec_without_decrypt($fixOGPHomeDirCommand);
 
-	$fixHomeDirCommand = 'find "$( getent passwd "' . $agentGroup . '" | cut -d: -f6 )" -type d -print0 | xargs -0 chmod o+x';
-	sudo_exec_without_decrypt($fixHomeDirCommand);
+	$fixOGPHomeDirCommand = 'find "$( getent passwd "' . $ogpAgentGroup . '" | cut -d: -f6 )" -type d -print0 | xargs -0 chmod o+x';
+	sudo_exec_without_decrypt($fixOGPHomeDirCommand);
 	
 	# Some game require that we are in the directory where the binary is.
 	my $game_binary_dir = Path::Class::Dir->new($home_path, $run_dir);
@@ -904,7 +906,7 @@ sub universal_start_without_decrypt
 		my @prestartenvvars = split /[\r\n]+/, $envVars;
 		my $envVarStr = "";
 		foreach my $line (@prestartenvvars) {
-			$line = replace_Env_Vars("", $home_id, $home_path, $line, $game_key);
+			$line = replace_OGP_Env_Vars("", $home_id, $home_path, $line, $game_key);
 			if($line ne ""){
 				logger "Configuring environment variable: $line";
 				$envVarStr .= "$line\n";
@@ -959,8 +961,8 @@ sub universal_start_without_decrypt
 	my $command;
 	my $run_before_start;
 	
-	# Replace any variables found in the command line
-	$startup_cmd = replace_Env_Vars($screen_id, $home_id, $home_path, $startup_cmd, $game_key);
+	# Replace any OGP variables found in the command line
+	$startup_cmd = replace_OGP_Env_Vars($screen_id, $home_id, $home_path, $startup_cmd, $game_key);
 	
 	if($file_extension eq ".exe" or $file_extension eq ".bat")
 	{
@@ -971,7 +973,7 @@ sub universal_start_without_decrypt
 			$command = "taskset -c $cpu wine $server_exe $startup_cmd";
 		}
 		
-		if(defined($Cfg::Preferences{autorestart_server}) &&  $Cfg::Preferences{autorestart_server} eq "1"){
+		if(defined($Cfg::Preferences{ogp_autorestart_server}) &&  $Cfg::Preferences{ogp_autorestart_server} eq "1"){
 			deleteStoppedStatFile($home_path);
 			$cli_bin = create_screen_cmd_loop($screen_id, $command, $envVars);
 		}else{
@@ -987,7 +989,7 @@ sub universal_start_without_decrypt
 			$command = "taskset -c $cpu $startup_cmd";
 		}
 		
-		if(defined($Cfg::Preferences{autorestart_server}) &&  $Cfg::Preferences{autorestart_server} eq "1"){
+		if(defined($Cfg::Preferences{ogp_autorestart_server}) &&  $Cfg::Preferences{ogp_autorestart_server} eq "1"){
 			deleteStoppedStatFile($home_path);
 			$cli_bin = create_screen_cmd_loop($screen_id, $command, $envVars);
 		}else{
@@ -1003,7 +1005,7 @@ sub universal_start_without_decrypt
 			$command = "taskset -c $cpu ./$server_exe $startup_cmd";
 		}
 		
-		if(defined($Cfg::Preferences{autorestart_server}) &&  $Cfg::Preferences{autorestart_server} eq "1"){
+		if(defined($Cfg::Preferences{ogp_autorestart_server}) &&  $Cfg::Preferences{ogp_autorestart_server} eq "1"){
 			deleteStoppedStatFile($home_path);
 			$cli_bin = create_screen_cmd_loop($screen_id, $command, $envVars);
 		}else{
@@ -1018,7 +1020,7 @@ sub universal_start_without_decrypt
 	  "Startup command [ $cli_bin ] will be executed in dir $game_binary_dir.";
 	
 	# Fix permissions one last time (for backup_home_log created folder / files / etc)
-	my $server_start_bashfile = "start_server.sh";
+	my $server_start_bashfile = $screen_id . "_startup_scr.sh";
 	secure_path_without_decrypt('chattr-i', $server_start_bashfile);
 	set_path_ownership($owner, $group, $home_path, 1);
 	my $readOnlyOwnerCmd = "chmod -Rf og-r '$server_start_bashfile'";
@@ -1297,13 +1299,13 @@ sub stop_server_without_decrypt
 	}
 	
 	# Create file indicator that the game server has been stopped if defined
-	if(defined($Cfg::Preferences{autorestart_server}) &&  $Cfg::Preferences{autorestart_server} eq "1"){
+	if(defined($Cfg::Preferences{ogp_autorestart_server}) &&  $Cfg::Preferences{ogp_autorestart_server} eq "1"){
 		
 		# Get current directory and chdir into the game's home dir
 		my $curDir = getcwd();
 		chdir $home_path;
 
-		# Create stopped indicator file used by autorestart if server crashes
+		# Create stopped indicator file used by autorestart of OGP if server crashes
 		open(STOPFILE, '>', "SERVER_STOPPED");
 		close(STOPFILE);
 		
@@ -1997,7 +1999,7 @@ sub lock_additional_files_logic{
 	
 	my $commandStr = "";
 	$filesToLock = startup_comma_format_to_multiline($filesToLock);
-	$filesToLock = replace_Env_Vars("", "", $homedir, $filesToLock);
+	$filesToLock = replace_OGP_Env_Vars("", "", $homedir, $filesToLock);
 	my @filesToProcess = split /[\r\n]+/, $filesToLock;
 	foreach my $line (@filesToProcess) {
 		my $fullPath = $homedir . "/" . $line;
@@ -2038,7 +2040,7 @@ sub run_before_start_commands
 		{		
 			logger "Running pre-start XML commands before starting server ID $server_id with a home directory of $homedir.";
 			my @prestartcmdlines = split /[\r\n]+/, $beforestartcmd;
-			my $prestartcmdfile = $homedir."/".'prestart.sh';
+			my $prestartcmdfile = $homedir."/".'prestart_ogp.sh';
 			open  FILE, '>', $prestartcmdfile;
 			print FILE "#!/bin/bash" . "\n";
 			print FILE "cd $homedir\n";
@@ -2061,7 +2063,7 @@ sub multiline_to_startup_comma_format{
 	my ($multiLineVar) = @_;
 	$multiLineVar =~ s/,//g; # commas are invalid anyways in bash
 	$multiLineVar =~ s/[\r]+//g;
-	$multiLineVar =~ s/[\n]+/{NEWLINE}/g;
+	$multiLineVar =~ s/[\n]+/{OGPNEWLINE}/g;
 	return $multiLineVar;
 }
 
@@ -2073,7 +2075,7 @@ sub multiline_to_bash_commands{
 
 sub startup_comma_format_to_multiline{
 	my ($multiLineVar) = @_;
-	$multiLineVar =~ s/{NEWLINE}/\n/g;
+	$multiLineVar =~ s/{OGPNEWLINE}/\n/g;
 	return $multiLineVar;
 }
 
@@ -3216,7 +3218,7 @@ sub ftp_mgr
 	$password =~ s/('+)/'\"$1\"'/g;
 	$home_path =~ s/('+)/'\"$1\"'/g;
 	
-	if(!defined($Cfg::Preferences{manages_ftp}) || (defined($Cfg::Preferences{manages_ftp}) &&  $Cfg::Preferences{manages_ftp} eq "1")){
+	if(!defined($Cfg::Preferences{ogp_manages_ftp}) || (defined($Cfg::Preferences{ogp_manages_ftp}) &&  $Cfg::Preferences{ogp_manages_ftp} eq "1")){
 		if( defined($Cfg::Preferences{ftp_method}) && $Cfg::Preferences{ftp_method} eq "IspConfig")
 		{
 			use constant ISPCONFIG_DIR => Path::Class::Dir->new(AGENT_RUN_DIR, 'IspConfig');
@@ -3278,7 +3280,7 @@ sub ftp_mgr
 			
 			chmod 0777, 'ehcp_ftp_log.txt';
 			
-			# In order to access the FTP files, the vsftpd user needs to be added to the group
+			# In order to access the FTP files, the vsftpd user needs to be added to the ogp group
 			sudo_exec_without_decrypt("usermod -a -G '$gid' ftp"); 
 			sudo_exec_without_decrypt("usermod -a -G '$gid' vsftpd"); 
 			sudo_exec_without_decrypt("usermod -a -G '$gidTwo' ftp"); 
@@ -3798,19 +3800,19 @@ sub agent_restart
 	if ($dec_check eq 'restart')
 	{
 		chdir AGENT_RUN_DIR;
-		if(-e "agent_run.pid")
+		if(-e "ogp_agent_run.pid")
 		{
-			my $init_pid	= `cat agent_run.pid`;
+			my $init_pid	= `cat ogp_agent_run.pid`;
 			chomp($init_pid);
 			
 			if(kill 0, $init_pid)
 			{
 				my $or_exist	= "";
 				my $rm_pid_file	= "";
-				if(-e "agent.pid")
+				if(-e "ogp_agent.pid")
 				{
-					$rm_pid_file	= " agent.pid";
-					my $agent_pid	= `cat agent.pid`;
+					$rm_pid_file	= " ogp_agent.pid";
+					my $agent_pid	= `cat ogp_agent.pid`;
 					chomp($agent_pid);
 					if( kill 0, $agent_pid )
 					{
@@ -3819,13 +3821,13 @@ sub agent_restart
 				}
 				
 				open (AGENT_RESTART_SCRIPT, '>', 'tmp_restart.sh');
-				my $restart = "echo -n \"Stopping Game Server Agent...\"\n".
+				my $restart = "echo -n \"Stopping OGP Agent...\"\n".
 							  "kill $init_pid\n".
 							  "while [ -e /proc/$init_pid $or_exist ];do echo -n .;sleep 1;done\n".
-							  "rm -f agent_run.pid $rm_pid_file\necho \" [OK]\"\n".
-							  "echo -n \"Starting Game Server Agent...\"\n".
-							  "screen -d -m -t \"agent\" -c \"" . SCREENRC_FILE . "\" -S agent bash agent_run -pidfile agent_run.pid\n".
-							  "while [ ! -e agent_run.pid -o ! -e agent.pid ];do echo -n .;sleep 1;done\n".
+							  "rm -f ogp_agent_run.pid $rm_pid_file\necho \" [OK]\"\n".
+							  "echo -n \"Starting OGP Agent...\"\n".
+							  "screen -d -m -t \"ogp_agent\" -c \"" . SCREENRC_FILE . "\" -S ogp_agent bash ogp_agent_run -pidfile ogp_agent_run.pid\n".
+							  "while [ ! -e ogp_agent_run.pid -o ! -e ogp_agent.pid ];do echo -n .;sleep 1;done\n".
 							  "echo \" [OK]\"\n".
 							  "rm -f tmp_restart.sh\n".
 							  "exit 0\n";
@@ -4646,7 +4648,7 @@ sub	generate_post_install_scripts
 							 '		fi'."\n".
 							 '	fi'."\n".
 							 '	if [ ! -d "${mods_info_path}" ];then mkdir -p "${mods_info_path}";fi'."\n".
-							 '	echo "${mod_name[$i]}" > "${mods_info_path}${mod_string[$i]}.modinfo"'."\n".
+							 '	echo "${mod_name[$i]}" > "${mods_info_path}${mod_string[$i]}.ogpmod"'."\n".
 							 '	i=$(expr $i + 1)'."\n".
 							 'done'."\n";
 	return "$post_install_scripts";
@@ -4664,7 +4666,7 @@ sub get_workshop_mods_info()
 		my @mods_info;
 		while(my $mod_info_file = readdir(MODS_INFO_DIR))
 		{
-			if($mod_info_file =~ /\.modinfo$/)
+			if($mod_info_file =~ /\.ogpmod$/)
 			{
 				my $mod_info_file_path = Path::Class::File->new($mods_info_dir_path, $mod_info_file);
 				if(open(my $fh, '<:encoding(UTF-8)', $mod_info_file_path))
@@ -4673,7 +4675,7 @@ sub get_workshop_mods_info()
 					chomp $row;
 					if($row ne "")
 					{
-						my ($string_name, $ext) = split(/\.mod/, $mod_info_file);
+						my ($string_name, $ext) = split(/\.ogp/, $mod_info_file);
 						push @mods_info, "$string_name:$row";
 					}
 					close($fh);
