@@ -7,16 +7,16 @@ agent_user=OGP_USER
 
 # Start function.
 start() {
-    echo "Starting OGP Agent..."
+    echo "Starting Game Server Agent..."
     cd $agent_dir
-    su -c "screen -d -m -t ogp_agent -c ogp_screenrc -S ogp_agent ./ogp_agent_run -pidfile ogp_agent_run.pid" $agent_user &> $agent_dir/ogp_agent.svc &
+    su -c "screen -d -m -t agent -c screenrc -S agent ./agent_run -pidfile agent_run.pid" $agent_user &> $agent_dir/agent.svc &
     echo
 }
 
 # Stop function.
 stop() {
-    echo "Stopping OGP Agent..."
-    kill `cat $agent_dir/ogp_agent_run.pid`
+    echo "Stopping Game Server Agent..."
+    kill `cat $agent_dir/agent_run.pid`
 }
 
 restart() {

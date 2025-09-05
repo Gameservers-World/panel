@@ -1,15 +1,15 @@
 #!/bin/bash
 #
 ### BEGIN INIT INFO
-# Provides:          ogp_agent
+# Provides:          agent
 # Required-Start:    $all
 # Required-Stop:     $all
 # Should-Start:      $all
 # Should-Stop:       $all
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start and stop the OGP Agent
-# Description:       Start and stop the OGP Agent
+# Short-Description: Start and stop the Game Server Agent
+# Description:       Start and stop the Game Server Agent
 ### END INIT INFO
 #
 
@@ -26,9 +26,9 @@ then
 fi
 
 start() {
-	if [ -e "$agent_dir/ogp_agent_run.pid" ]
+	if [ -e "$agent_dir/agent_run.pid" ]
 	then
-		pid=$(cat $agent_dir/ogp_agent_run.pid)
+		pid=$(cat $agent_dir/agent_run.pid)
 		out=$(kill -0 $pid > /dev/null 2>&1)
 		if [ $? == 0 ]
 		then
@@ -90,14 +90,14 @@ start() {
 	fi
 
 	cd $agent_dir
-	out=$(su -c "screen -d -m -t ogp_agent -c ogp_screenrc -S ogp_agent ./ogp_agent_run -pidfile ogp_agent_run.pid" $agent_user >/dev/null 2>&1)
+	out=$(su -c "screen -d -m -t agent -c screenrc -S agent ./agent_run -pidfile agent_run.pid" $agent_user >/dev/null 2>&1)
 	return 0
 }
 
 stop() {
-	if [ -e "$agent_dir/ogp_agent_run.pid" ]
+	if [ -e "$agent_dir/agent_run.pid" ]
 	then
-		pid=$(cat $agent_dir/ogp_agent_run.pid)
+		pid=$(cat $agent_dir/agent_run.pid)
 		kill -0 $pid > /dev/null 2>&1
 		if [ $? == 0 ]
 		then
@@ -126,7 +126,7 @@ case "${1:-''}" in
 	RETVAL=$?
 	;;
  	*)
-	echo "Usage: service ogp_agent start|stop|restart"
+	echo "Usage: service agent start|stop|restart"
 	exit 1
 	;;
 esac

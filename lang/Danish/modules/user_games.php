@@ -6,7 +6,7 @@
 define('OGP_LANG_add_mods_note', "Du er nødtil at tilføje mods efter en server er tildelt en bruger. Dette ka gøres, ved at redigere serveren.");
 define('OGP_LANG_game_servers', "Spil Servere");
 define('OGP_LANG_game_path', "Spil Sti");
-define('OGP_LANG_game_path_info', "An absolute server path. Example: /home/ogpbot/OGP_User_Files/My_Server");
+define('OGP_LANG_game_path_info', "An absolute server path. Example: /home/ogpbot/User_Files/My_Server");
 define('OGP_LANG_game_server_name_info', "Server navn hjælper brugere til at genkende deres servere.");
 define('OGP_LANG_control_password', "Kontrol kodeord");
 define('OGP_LANG_control_password_info', "Denne adgangskode bliver brugt til server kontrol, så som RCON kodeord. Hvis feltet hvor adgangskoden er tom, er der andre muligheder.");

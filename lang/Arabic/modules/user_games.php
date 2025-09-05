@@ -6,7 +6,7 @@
 define('OGP_LANG_add_mods_note', "تحتاج إضافة مودز بعد إضافة سيرفر إلى مستخدم . يمكنك عمل ذلك بتعديل السيرفر.");
 define('OGP_LANG_game_servers', "سيرفرات الألعاب");
 define('OGP_LANG_game_path', "مسار اللعبة");
-define('OGP_LANG_game_path_info', "An absolute server path. Example: /home/ogpbot/OGP_User_Files/My_Server");
+define('OGP_LANG_game_path_info', "An absolute server path. Example: /home/ogpbot/User_Files/My_Server");
 define('OGP_LANG_game_server_name_info', "اسم السيرفر يساعد المستخدمين على معرفة سيرفراتهم");
 define('OGP_LANG_control_password', "التحكم في كلمة المرور");
 define('OGP_LANG_control_password_info', "كلمةالمرور هذه تستخدم للتحكم فى السيرفر . مثل كلمة السر RCON . إذا كانت خانة كلمة المرور فارغة هذا يعنى أنها مستخدمة.");

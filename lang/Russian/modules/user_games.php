@@ -6,7 +6,7 @@
 define('OGP_LANG_add_mods_note', "Вам нужно добавить конфигурации для сервера. Это можно сделать в настройках сервера.");
 define('OGP_LANG_game_servers', "Игровые Сервера");
 define('OGP_LANG_game_path', "Путь");
-define('OGP_LANG_game_path_info', "Полный и абсолютный путь к серверу. Пример /home/ogpbot/OGP_User_Files/My_Server");
+define('OGP_LANG_game_path_info', "Полный и абсолютный путь к серверу. Пример /home/ogpbot/User_Files/My_Server");
 define('OGP_LANG_game_server_name_info', "Название может помочь определить сервер.");
 define('OGP_LANG_control_password', "Пароль управления");
 define('OGP_LANG_control_password_info', "Пароль используется для управления сервером, как RCON например. Если оставить пустым, то будут использоваться другие методы.");
