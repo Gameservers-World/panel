@@ -3170,6 +3170,36 @@ class OGPDatabaseMySQL extends OGPDatabase
 		return $result['last_param'];
 	}
 	
+	public function changeLastStartupCmd($home_id, $command) {
+		$query = sprintf("UPDATE `%sserver_homes` SET `last_startup_cmd` = '%s' WHERE `home_id` = %d",
+			$this->table_prefix,
+			$this->realEscapeSingle($command),
+			$this->realEscapeSingle($home_id));
+		++$this->queries_;
+		if ( mysqli_query($this->link,$query) === FALSE )
+			return FALSE;
+
+		return TRUE;
+	}
+	
+	public function getLastStartupCmd($home_id) {
+		if ( !$this->link ) return FALSE;
+
+		$query = sprintf("SELECT `last_startup_cmd` FROM `%sserver_homes` WHERE `home_id` = %d",
+			$this->table_prefix,
+			$this->realEscapeSingle($home_id));
+
+		++$this->queries_;
+		$result = mysqli_query($this->link,$query);
+		
+		if ( mysqli_num_rows($result) != 1 )
+			return FALSE;
+			
+		$result = mysqli_fetch_assoc( $result );
+
+		return $result['last_startup_cmd'];
+	}
+	
 	public function saveServerStatusCache($ip_id,$port,$status) {
 		$query = sprintf("SELECT * FROM `%sstatus_cache` WHERE `ip_id` = %s AND `port` = %s;",
 			$this->table_prefix,

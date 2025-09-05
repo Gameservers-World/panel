@@ -207,5 +207,6 @@ define('OGP_LANG_phan', "Phantom");
 define('OGP_LANG_sec', "Seconds");
 define('OGP_LANG_unknown_rsync_mirror', "You attempted to start an update from a mirror which doesn't exist.");
 define('OGP_LANG_custom_fields', "Server Settings");
+define('OGP_LANG_last_startup_command', "Last Startup Command");
 ?>
 

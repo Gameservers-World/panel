@@ -582,6 +582,8 @@ elseif($server_home['home_id'] == $_POST['home_id'])
 	}
 	//Save the param used to the database
 	$db->changeLastParam($server_home['home_id'],json_encode($save_param)); 
+	//Save the startup command to the database
+	$db->changeLastStartupCmd($server_home['home_id'], $start_cmd); 
 	
 	echo "<table class='server-starting'>";
 	echo "<tr><td class='right'>". get_lang("ogp_agent_ip") .

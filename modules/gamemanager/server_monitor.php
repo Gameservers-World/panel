@@ -436,6 +436,13 @@ echo "<table id='servermonitor' class='tablesorter' data-sortlist='[[0,0],[3,1]]
 			
 			$btns = get_monitor_buttons($server_home, $server_xml);
 			
+			// Get last startup command for display
+			$last_startup_cmd = $db->getLastStartupCmd($server_home['home_id']);
+			$startup_cmd_display = "";
+			if ($last_startup_cmd) {
+				$startup_cmd_display = "<br><b>". get_lang("last_startup_command") .":</b><br><span style='font-family:monospace; font-size:10px; color:#666; word-wrap: break-word;'>" . htmlentities($last_startup_cmd) . "</span>";
+			}
+			
 			//End
 
 			$remote = new OGPRemoteLibrary($server_home['agent_ip'], $server_home['agent_port'], $server_home['encryption_key'], $server_home['timeout']);
@@ -555,7 +562,7 @@ echo "<table id='servermonitor' class='tablesorter' data-sortlist='[[0,0],[3,1]]
 				$first .= "</tr>";
 
 			$second = "<tr class='expand-child'>";
-				@$second .= "<td colspan='4'>" . $refresh->getdiv($pos,"width:100%;") . "$offlineT</td>";
+				@$second .= "<td colspan='4'>" . $refresh->getdiv($pos,"width:100%;") . "$offlineT" . $startup_cmd_display . "</td>";
 				$second .= "<td class='owner' >$other_owners$groupsus</td>";
 
 				if( $server_xml->protocol != "teamspeak3" OR ($startup_file_exists and $server_xml->protocol == "teamspeak3") OR ($status == "offline" and $server_xml->protocol == "teamspeak3") )
