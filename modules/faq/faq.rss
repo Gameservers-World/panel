@@ -185,6 +185,466 @@ As always, if you need help just ask on Discord.
     </content:encoded>
 </item>
 
+<item>
+    <title>game_key</title>
+    <category>XML Config</category>
+    <content:encoded>
+    The unique identifier for the game. This key is used internally by the system to identify the game type.
+    
+    Usage: &lt;game_key&gt;unique_game_identifier&lt;/game_key&gt;
+    
+    Example: &lt;game_key&gt;counter_strike_source&lt;/game_key&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>protocol</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Specifies the network protocol used by the game server for communication.
+    
+    Usage: &lt;protocol&gt;protocol_name&lt;/protocol&gt;
+    
+    Example: &lt;protocol&gt;valve&lt;/protocol&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>lgsl_query_name</title>
+    <category>XML Config</category>
+    <content:encoded>
+    The query name used by LGSL (Live Game Server List) to identify and query the server status.
+    
+    Usage: &lt;lgsl_query_name&gt;query_name&lt;/lgsl_query_name&gt;
+    
+    Example: &lt;lgsl_query_name&gt;cs16&lt;/lgsl_query_name&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>gameq_query_name</title>
+    <category>XML Config</category>
+    <content:encoded>
+    The query name used by GameQ library to query server information and player details.
+    
+    Usage: &lt;gameq_query_name&gt;query_name&lt;/gameq_query_name&gt;
+    
+    Example: &lt;gameq_query_name&gt;source&lt;/gameq_query_name&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>installer</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Specifies the installation method for the game server (e.g., steamcmd, manual, etc.).
+    
+    Usage: &lt;installer&gt;installer_type&lt;/installer&gt;
+    
+    Example: &lt;installer&gt;steamcmd&lt;/installer&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>game_name</title>
+    <category>XML Config</category>
+    <content:encoded>
+    The human-readable display name of the game shown in the panel interface.
+    
+    Usage: &lt;game_name&gt;Display Name&lt;/game_name&gt;
+    
+    Example: &lt;game_name&gt;Counter-Strike: Source&lt;/game_name&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>server_exec_name</title>
+    <category>XML Config</category>
+    <content:encoded>
+    The name of the server executable file that will be started to run the game server.
+    
+    Usage: &lt;server_exec_name&gt;executable_name&lt;/server_exec_name&gt;
+    
+    Example: &lt;server_exec_name&gt;srcds_linux&lt;/server_exec_name&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>query_port</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Defines the query port offset from the main server port. The 'type' attribute can be 'add' or 'subtract'.
+    
+    Usage: &lt;query_port type="add"&gt;offset_value&lt;/query_port&gt;
+    
+    Example: &lt;query_port type="add"&gt;1&lt;/query_port&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>cli_template</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Template string that defines the order and structure of command line parameters when starting the server.
+    
+    Usage: &lt;cli_template&gt;%PARAM1% %PARAM2% %PARAM3%&lt;/cli_template&gt;
+    
+    Example: &lt;cli_template&gt;%IP% %PORT% %PLAYERS% %MAP%&lt;/cli_template&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>cli_params</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Container element that holds individual command line parameter definitions (cli_param elements).
+    
+    Usage: 
+    &lt;cli_params&gt;
+        &lt;cli_param id="PORT" cli_string="-port" options="s" /&gt;
+    &lt;/cli_params&gt;
+    
+    Available parameter IDs: GAME_TYPE, HOSTNAME, IP, MAP, PID_FILE, PLAYERS, PORT, QUERY_PORT, BASE_PATH, HOME_PATH, SAVE_PATH, OUTPUT_PATH, USER_PATH, CONTROL_PASSWORD
+    </content:encoded>
+</item>
+
+<item>
+    <title>reserve_ports</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Container for additional ports that need to be reserved/allocated for the server (beyond the main port).
+    
+    Usage:
+    &lt;reserve_ports&gt;
+        &lt;port type="add" id="RCON_PORT" cli_string="+rcon_port"&gt;1&lt;/port&gt;
+    &lt;/reserve_ports&gt;
+    
+    The 'type' attribute can be 'add' or 'subtract' to calculate offset from main port.
+    </content:encoded>
+</item>
+
+<item>
+    <title>cli_allow_chars</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Regular expression pattern that defines which characters are allowed in command line parameters.
+    
+    Usage: &lt;cli_allow_chars&gt;regex_pattern&lt;/cli_allow_chars&gt;
+    
+    Example: &lt;cli_allow_chars&gt;[a-zA-Z0-9._-]&lt;/cli_allow_chars&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>maps_location</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Relative path from the server root directory where map files are located.
+    
+    Usage: &lt;maps_location&gt;path/to/maps/&lt;/maps_location&gt;
+    
+    Example: &lt;maps_location&gt;cstrike/maps/&lt;/maps_location&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>map_list</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Path to the file that contains the list of available maps for the server.
+    
+    Usage: &lt;map_list&gt;path/to/maplist.txt&lt;/map_list&gt;
+    
+    Example: &lt;map_list&gt;cstrike/mapcycle.txt&lt;/map_list&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>console_log</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Path to the server console log file for monitoring server output and errors.
+    
+    Usage: &lt;console_log&gt;path/to/log/file&lt;/console_log&gt;
+    
+    Example: &lt;console_log&gt;logs/console.log&lt;/console_log&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>exe_location</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Relative path from server root to the directory containing the server executable.
+    
+    Usage: &lt;exe_location&gt;path/to/executable/&lt;/exe_location&gt;
+    
+    Example: &lt;exe_location&gt;bin/&lt;/exe_location&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>max_user_amount</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Maximum number of players/users that can connect to the server simultaneously.
+    
+    Usage: &lt;max_user_amount&gt;number&lt;/max_user_amount&gt;
+    
+    Example: &lt;max_user_amount&gt;32&lt;/max_user_amount&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>control_protocol</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Protocol used for remote server control and administration commands.
+    
+    Available values: rcon (HL, Q1/2/3), rcon2 (HL2/Source), lcon (legacy console), armabe (Arma 2 BattlEye)
+    
+    Usage: &lt;control_protocol&gt;protocol_type&lt;/control_protocol&gt;
+    
+    Example: &lt;control_protocol&gt;rcon2&lt;/control_protocol&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>control_protocol_type</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Sub-type specification for the control protocol version.
+    
+    Available values: new (Half-Life 1.1.0.6 or newer), old (Quake 1/2/3 or old Half-Life)
+    
+    Usage: &lt;control_protocol_type&gt;protocol_version&lt;/control_protocol_type&gt;
+    
+    Example: &lt;control_protocol_type&gt;new&lt;/control_protocol_type&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>mods</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Container element for game modifications/variants. Each server must have at least one mod.
+    
+    Usage:
+    &lt;mods&gt;
+        &lt;mod key="default"&gt;
+            &lt;name&gt;Default&lt;/name&gt;
+            &lt;installer_name&gt;app_id&lt;/installer_name&gt;
+            &lt;installer_login&gt;anonymous&lt;/installer_login&gt;
+        &lt;/mod&gt;
+    &lt;/mods&gt;
+    
+    Sub-elements: name, installer_name, installer_login, betaname, betapwd, steam_bitness
+    </content:encoded>
+</item>
+
+<item>
+    <title>replace_texts</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Container for text replacement rules in configuration files. Used to dynamically update config files with server-specific values.
+    
+    Usage:
+    &lt;replace_texts&gt;
+        &lt;text key="hostname"&gt;
+            &lt;var&gt;%HOSTNAME%&lt;/var&gt;
+            &lt;filepath&gt;server.cfg&lt;/filepath&gt;
+        &lt;/text&gt;
+    &lt;/replace_texts&gt;
+    
+    Sub-elements: var, filepath, options, occurrence, default
+    </content:encoded>
+</item>
+
+<item>
+    <title>server_params</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Container for server configuration parameters that users can modify through the panel interface.
+    
+    Usage:
+    &lt;server_params&gt;
+        &lt;param key="-maxplayers" type="text"&gt;
+            &lt;caption&gt;Max Players&lt;/caption&gt;
+            &lt;desc&gt;Maximum number of players&lt;/desc&gt;
+            &lt;default&gt;16&lt;/default&gt;
+        &lt;/param&gt;
+    &lt;/server_params&gt;
+    
+    Parameter types: text, select, checkbox, checkbox_key_value
+    </content:encoded>
+</item>
+
+<item>
+    <title>custom_fields</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Container for custom configuration fields that modify server configuration files directly.
+    
+    Usage:
+    &lt;custom_fields&gt;
+        &lt;field key="sv_gravity" type="text"&gt;
+            &lt;var&gt;sv_gravity&lt;/var&gt;
+            &lt;filepath&gt;server.cfg&lt;/filepath&gt;
+            &lt;default_value&gt;800&lt;/default_value&gt;
+            &lt;desc&gt;Server gravity setting&lt;/desc&gt;
+        &lt;/field&gt;
+    &lt;/custom_fields&gt;
+    
+    Sub-elements: var, filepath, default_value, desc, options, occurrence, access
+    </content:encoded>
+</item>
+
+<item>
+    <title>list_players_command</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Server console command used to retrieve the list of currently connected players.
+    
+    Usage: &lt;list_players_command&gt;console_command&lt;/list_players_command&gt;
+    
+    Example: &lt;list_players_command&gt;status&lt;/list_players_command&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>player_info_regex</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Regular expression pattern used to parse player information from the server console output.
+    
+    Usage: &lt;player_info_regex&gt;regex_pattern&lt;/player_info_regex&gt;
+    
+    Example: &lt;player_info_regex&gt;#\s*(\d+)\s+"(.*)"\s+(\S+)\s+(\d+)\s+(\d+)\s+(\S+)&lt;/player_info_regex&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>player_info</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Container that defines how to parse individual player information fields from console output.
+    
+    Usage:
+    &lt;player_info&gt;
+        &lt;index key="player_id"&gt;1&lt;/index&gt;
+        &lt;index key="player_name"&gt;2&lt;/index&gt;
+        &lt;index key="player_steamid"&gt;3&lt;/index&gt;
+    &lt;/player_info&gt;
+    
+    Each index corresponds to a capture group in the player_info_regex.
+    </content:encoded>
+</item>
+
+<item>
+    <title>player_commands</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Container for commands that can be executed on individual players (kick, ban, etc.).
+    
+    Usage:
+    &lt;player_commands&gt;
+        &lt;command key="kick" type="text"&gt;
+            &lt;string&gt;kick %PLAYER_ID%&lt;/string&gt;
+        &lt;/command&gt;
+    &lt;/player_commands&gt;
+    
+    Sub-elements: string, default, option
+    </content:encoded>
+</item>
+
+<item>
+    <title>pre_install</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Command or script to execute before the game server installation process begins.
+    
+    Usage: &lt;pre_install&gt;command_or_script&lt;/pre_install&gt;
+    
+    Example: &lt;pre_install&gt;mkdir -p logs&lt;/pre_install&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>post_install</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Command or script to execute after the game server installation process completes.
+    
+    Usage: &lt;post_install&gt;command_or_script&lt;/post_install&gt;
+    
+    Example: &lt;post_install&gt;chmod +x server_binary&lt;/post_install&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>pre_start</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Command or script to execute before starting the game server process.
+    
+    Usage: &lt;pre_start&gt;command_or_script&lt;/pre_start&gt;
+    
+    Example: &lt;pre_start&gt;echo "Starting server..." &gt; logs/startup.log&lt;/pre_start&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>post_start</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Command or script to execute after the game server process has started.
+    
+    Usage: &lt;post_start&gt;command_or_script&lt;/post_start&gt;
+    
+    Example: &lt;post_start&gt;echo "Server started successfully" &gt; logs/startup.log&lt;/post_start&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>environment_variables</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Environment variables to set before starting the server process, separated by semicolons.
+    
+    Usage: &lt;environment_variables&gt;VAR1=value1;VAR2=value2&lt;/environment_variables&gt;
+    
+    Example: &lt;environment_variables&gt;LD_LIBRARY_PATH=./lib;MALLOC_CHECK_=0&lt;/environment_variables&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>lock_files</title>
+    <category>XML Config</category>
+    <content:encoded>
+    List of files that should be protected from user modification, separated by semicolons.
+    
+    Usage: &lt;lock_files&gt;file1;file2;file3&lt;/lock_files&gt;
+    
+    Example: &lt;lock_files&gt;server_binary;startup_script.sh;critical_config.cfg&lt;/lock_files&gt;
+    </content:encoded>
+</item>
+
+<item>
+    <title>configuration_files</title>
+    <category>XML Config</category>
+    <content:encoded>
+    Container for configuration files that can be edited through the panel's configuration editor.
+    
+    Usage:
+    &lt;configuration_files&gt;
+        &lt;file description="Server Configuration"&gt;server.cfg&lt;/file&gt;
+        &lt;file description="Map Cycle" options="maps"&gt;mapcycle.txt&lt;/file&gt;
+    &lt;/configuration_files&gt;
+    
+    Attributes: description (display name), options (special handling)
+    </content:encoded>
+</item>
+
 </channel>
 </rss>
 

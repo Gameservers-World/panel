@@ -120,10 +120,23 @@ function exec_ogp_module()
 	}
 		
 	
+	// Check if user is admin
+	global $db;
+	$isAdmin = false;
+	if(isset($_SESSION['user_id']) && $db && $db instanceof OGPDatabase) {
+		$isAdmin = $db->isAdmin($_SESSION['user_id']);
+	}
+	
 	$entries = array();
 	foreach($items as $index => $item)
 	{
 		$category = $item['category'][0];
+		
+		// Only show XML Config category to admin users
+		if($category === 'XML Config' && !$isAdmin) {
+			continue;
+		}
+		
 		$entries[$category][$index]['title'] = $item['title'][0];
 		$entries[$category][$index]['content'] = $item['content:encoded'][0];
 	}
